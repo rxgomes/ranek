@@ -6,3 +6,17 @@ export function mountQueryString(obj) {
 
     return queryString
 }
+
+const filters = {
+    formatPrice(input) {
+        input = Number(input);
+
+        if (isNaN(input)) {
+            return "-";
+        }
+
+        return input.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
+    }
+}
+
+export default filters;

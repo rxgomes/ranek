@@ -1,26 +1,33 @@
 <template>
   <section class="product-container">
-    <div v-if="products && products.length" class="products">
-      <div class="product" v-for="(product, index) in products" :key="index">
-        <router-link to="/">
-          <img
-            v-if="product.fotos"
-            :src="product.fotos[0].src"
-            :alt="product.fotos[0].titulo"
-          />
-          <h2 class="title">{{ product.nome }}</h2>
-          <p class="description">{{ product.descricao }}</p>
-          <p class="price">{{ product.preco }}</p>
-        </router-link>
+    <transition mode="out-in">
+      <div v-if="products && products.length" class="products" key="products11">
+        <div class="product" v-for="(product, index) in products" :key="index">
+          <router-link :to="{ name: 'product', params: { id: product.id } }">
+            <img
+              v-if="product.fotos"
+              :src="product.fotos[0].src"
+              :alt="product.fotos[0].titulo"
+            />
+            <h2 class="title">{{ product.nome }}</h2>
+            <p class="description">{{ product.descricao }}</p>
+            <p class="price">{{ $filters.formatPrice(product.preco) }}</p>
+          </router-link>
+        </div>
+        <PaginationComponent
+          :totalItems="totalItems"
+          :itemsPerPage="itemsPerPage"
+        />
       </div>
-      <PaginationComponent
-        :totalItems="totalItems"
-        :itemsPerPage="itemsPerPage"
-      />
-    </div>
-    <div class="not-found" v-else-if="products && products.length == 0">
-      <p>Nenhum item foi localizado</p>
-    </div>
+      <div
+        class="not-found"
+        v-else-if="products && products.length == 0"
+        key="hot-found"
+      >
+        <p>Nenhum item foi localizado</p>
+      </div>
+      <loading-component v-else key="loading" />
+    </transition>
   </section>
 </template>
 
@@ -37,7 +44,7 @@ export default {
   data() {
     return {
       products: [],
-      itemsPerPage: 3,
+      itemsPerPage: 9,
       totalItems: 0,
     };
   },
@@ -56,11 +63,13 @@ export default {
   },
   methods: {
     getProducts() {
-      console.log("ok");
-      api.get(this.url).then((r) => {
-        this.products = r.data;
-        this.totalItems = Number(r.headers["x-total-count"]);
-      });
+      this.products = null;
+      setTimeout(() => {
+        api.get(this.url).then((r) => {
+          this.products = r.data;
+          this.totalItems = Number(r.headers["x-total-count"]);
+        });
+      }, 1500);
     },
   },
   created() {

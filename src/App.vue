@@ -1,7 +1,9 @@
 <template>
   <HeaderComponent />
   <main id="main">
-    <router-view />
+    <transition mode="out-in">
+      <router-view />
+    </transition>
   </main>
   <FooterComponent />
 </template>
@@ -68,6 +70,7 @@ img {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   cursor: pointer;
 }
+
 .btn:hover {
   background: #65d;
   transform: scale(1.1);
@@ -81,6 +84,10 @@ img {
 
 #main {
   flex: 1;
+}
+
+label {
+  margin-bottom: 5px;
 }
 
 input,
@@ -102,5 +109,23 @@ textarea:focus {
   outline: none;
   box-shadow: 0 6px 2px rgba(30, 60, 90, 0.2);
   border-color: #87f;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.v-enter-from {
+  transform: translate3d(0, -20px, 0);
+}
+
+.v-leave-to {
+  transform: translate3d(0, 20px, 0);
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.3s;
 }
 </style>

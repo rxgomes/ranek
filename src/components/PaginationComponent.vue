@@ -4,7 +4,7 @@
     <li v-for="page in pages" :key="page">
       <router-link
         :to="{ query: query(page) }"
-        v-bind:class="{ true: page === Number(this.$route.query._page) }"
+        :class="{ true: page === Number(this.$route.query._page) }"
         >{{ page }}</router-link
       >
     </li>
